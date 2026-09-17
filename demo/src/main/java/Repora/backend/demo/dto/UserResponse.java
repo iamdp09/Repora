@@ -1,4 +1,14 @@
 package Repora.backend.demo.dto;
 
-public record UserResponse() {
+import java.util.UUID;
+
+public record UserResponse(
+        UUID id,
+        Long githubId,
+        String githubUsername,
+        String displayName,
+        String avatarUrl
+) {
+
+
 }
