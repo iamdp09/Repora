@@ -19,12 +19,12 @@ import org.springframework.beans.factory.annotation.Value;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AuthenticationSuccessHandler oauth2SuccessHandler;
-    private final AuthenticationFailureHandler oauth2FailureHandler;
     private final GithubOAuth2UserService githubOAuth2UserService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   AuthenticationFailureHandler oauth2FailureHandler,
+                                                   AuthenticationSuccessHandler oauth2SuccessHandler) throws Exception  {
         http.cors(Customizer.withDefaults())
                         .csrf(csrf -> csrf.disable())
                         .sessionManagement(session ->
