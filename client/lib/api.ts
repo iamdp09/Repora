@@ -1,4 +1,5 @@
 
+export type IndexStatus = "PENDING" | "INDEXING" | "READY" | "FAILED";
 
 export type User = {
   id: string;
@@ -6,6 +7,35 @@ export type User = {
   githubUsername: string;
   displayName: string;
   avatarUrl: string | null;
+};
+
+export type Repository = {
+  id: string;
+  githubRepoId: number;
+  owner: string;
+  name: string;
+  fullName: string;
+  isPrivate: boolean;
+  defaultBranch: string;
+  language: string | null;
+  htmlUrl: string | null;
+  description: string | null;
+  indexStatus: IndexStatus;
+  indexedAt: string | null;
+  chunkCount: number;
+  filesTotal: number;
+  filesProcessed: number;
+  errorMessage: string | null;
+};
+
+export type IndexStatusResponse = {
+  repositoryId: string;
+  indexStatus: IndexStatus;
+  filesTotal: number;
+  filesProcessed: number;
+  chunkCount: number;
+  indexedAt: string | null;
+  errorMessage: string | null;
 };
 
 
@@ -66,4 +96,12 @@ export const api = {
       method: "POST",
     }),
 
+    // listrepos fetches the list of repositories for the authenticated user.
+  listRepos: (refresh = true) =>
+    apiFetch<Repository[]>(`/api/repos?refresh=${refresh}`),
+    getRepo: (id: string) => apiFetch<Repository>(`/api/repos/${id}`),
+    startIndex: (id: string) =>
+    apiFetch<Repository>(`/api/repos/${id}/index`, { method: "POST" }),
+    indexStatus: (id: string) =>
+    apiFetch<IndexStatusResponse>(`/api/repos/${id}/status`),
 };
