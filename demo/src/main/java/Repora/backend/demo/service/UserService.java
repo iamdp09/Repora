@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -16,8 +17,8 @@ public class UserService {
     public final TextEncryptor tokenEncryptor;
 
     @Transactional(readOnly = true)
-    public User requiredById(Long githubId) {
-        return userRepository.findByGithubId(githubId).orElseThrow(()-> new IllegalArgumentException("User not found with githubId: " + githubId));
+    public User requiredById(UUID id) {
+        return userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("User not found with githubId: " + id));
     }
 
     public String decryptAccessToken(User user) {
