@@ -1,4 +1,10 @@
 package Repora.backend.demo.dto;
 
-public class CreateChatSessionRequest {
+import jakarta.validation.constraints.NotNull;
+
+import java.util.UUID;
+
+public record CreateChatSessionRequest(
+        @NotNull UUID repositoryId,
+        String title) {
 }

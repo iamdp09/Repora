@@ -1,4 +1,12 @@
 package Repora.backend.demo.repository;
 
-public class ChatMessageRepository {
+
+import Repora.backend.demo.entity.ChatMessage;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID> {
+    List<ChatMessage> findBySessionIdOrderByCreatedAtAsc(UUID sessionId);
 }
