@@ -1,4 +1,9 @@
 package Repora.backend.demo.dto;
 
-public class CitationDto {
+
+public record CitationDto(
+        String filePath,
+        Integer startLine,
+        Integer endLine,
+        String language) {
 }
