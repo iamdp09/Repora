@@ -5,6 +5,7 @@ import Repora.backend.demo.dto.RepositoryResponse;
 import Repora.backend.demo.entity.Repository;
 import Repora.backend.demo.security.CurrentUser;
 import Repora.backend.demo.service.RepoService;
+import Repora.backend.demo.service.indexing.IndexingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class RepoController {
 
     private final CurrentUser currentUser;
     private final RepoService repoService;
+    private final IndexingService indexingService;
 
 
     @GetMapping
@@ -36,6 +38,14 @@ public class RepoController {
     public RepositoryResponse get(@PathVariable UUID id) {
         UUID userId = currentUser.require().getId();
         return repoService.toResponse(repoService.requireOwned(id, userId));
+    }
+
+    @PostMapping("/{id}/index")
+    public ResponseEntity<RepositoryResponse> index(@PathVariable UUID id) {
+        UUID userId = currentUser.require().getId();
+        Repository repo = indexingService.startIndexing(id, userId);
+        indexingService.indexAsync(id, userId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(repoService.toResponse(repo));
     }
 
     @GetMapping("/{id}/status")
